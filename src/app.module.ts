@@ -8,9 +8,13 @@ import { Class } from './modules/classes/classes.entity';
 import { Period } from './modules/periods/periods.entity';
 import { Task } from './modules/tasks/tasks.entity';
 import { User } from './modules/users/users.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
