@@ -5,6 +5,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/users.entity';
 import { PasswordHasherService } from './password-hasher.service';
+import { LoginResponseDto } from './dto/login-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +42,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: AuthDto): Promise<{ access_token: string }> {
+  async login(user: AuthDto): Promise<LoginResponseDto> {
     this.logger.debug(`Logging in user: ${JSON.stringify(user, null, 2)}`);
     const userEntity = await this.usersService.findByEmail(user.email);
     if (!userEntity) {

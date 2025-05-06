@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
@@ -22,9 +22,10 @@ import { PasswordHasherService } from './password-hasher.service';
         },
       }),
     }),
-    UsersModule,
+    forwardRef(() => UsersModule),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy, PasswordHasherService],
   controllers: [AuthController],
+  exports: [PasswordHasherService],
 })
 export class AuthModule { }

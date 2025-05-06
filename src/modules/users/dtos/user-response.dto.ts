@@ -29,6 +29,33 @@ export class UserResponseDto {
   })
   email: string;
 
+  @IsString()
+  @ApiProperty({
+    description: 'Role of the user',
+    example: 'student',
+    required: true,
+    type: 'string',
+  })
+  role: 'student' | 'coordinator' | 'admin';
+
+  @IsString()
+  @ApiProperty({
+    description: 'Creation date of the user',
+    example: '2023-10-01T12:00:00Z',
+    required: true,
+    type: 'string',
+  })
+  created_at: string;
+
+  @IsString()
+  @ApiProperty({
+    description: 'Last update date of the user',
+    example: '2023-10-01T12:00:00Z',
+    required: true,
+    type: 'string',
+  })
+  updated_at: string;
+
   @IsUUID()
   @ApiProperty({
     description: 'Class ID of the user',
@@ -37,13 +64,4 @@ export class UserResponseDto {
     type: 'string',
   })
   classId: string;
-
-  @IsUUID()
-  @ApiProperty({
-    description: 'Period ID of the user',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-    required: true,
-    type: 'string',
-  })
-  periodId: string;
 }

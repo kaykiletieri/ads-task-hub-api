@@ -32,6 +32,16 @@ export class CreateUserDto {
   })
   password: string;
 
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Role of the user',
+    example: 'student',
+    required: true,
+    type: 'string',
+  })
+  role: 'student' | 'coordinator' | 'admin';
+
   @IsUUID()
   @IsNotEmpty()
   @ApiProperty({
@@ -41,14 +51,4 @@ export class CreateUserDto {
     type: 'string',
   })
   classId: string;
-
-  @IsUUID()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Period ID of the user',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-    required: true,
-    type: 'string',
-  })
-  periodId: string;
 }

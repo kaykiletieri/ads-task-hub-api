@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Class } from '../classes/classes.entity';
 
 @Entity('users')
 export class User {
@@ -19,13 +20,13 @@ export class User {
     enum: ['student', 'coordinator', 'admin'],
     default: 'student',
   })
-  role: string;
+  role: 'student' | 'coordinator' | 'admin';
 
-  @Column({ nullable: true })
-  class: string;
-
-  @Column({ nullable: true })
-  period: string;
+  @ManyToOne(() => Class, (classEntity) => classEntity.users, {
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'class_id', })
+  class: Class;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: string;
