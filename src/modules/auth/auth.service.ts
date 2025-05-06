@@ -1,8 +1,10 @@
+// src/auth/auth.service.ts
 import { Injectable, Logger } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/users.entity';
+import { PasswordHasherService } from './password-hasher.service';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +13,8 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-  ) {}
+    private readonly passwordHasherService: PasswordHasherService,
+  ) { }
 
   async validateUser(email: string, password: string): Promise<User | null> {
     this.logger.debug(`Validating user with email: ${email}`);
@@ -23,18 +26,14 @@ export class AuthService {
     }
 
     this.logger.debug(`User found: ${JSON.stringify(user, null, 2)}`);
-    const isPasswordValid = await this.usersService.verifyPassword(
+    const isPasswordValid = await this.passwordHasherService.verifyPassword(
       password,
       user.password_hash,
     );
     this.logger.debug(`Password comparison result: ${isPasswordValid}`);
 
     if (isPasswordValid) {
-      this.logger.debug(
-        `User validated successfully, returning user data without passwordHash `,
-        password,
-      );
-
+      this.logger.debug(`User validated successfully, returning user data without passwordHash`);
       return user;
     }
 

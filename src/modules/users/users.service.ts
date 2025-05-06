@@ -1,16 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { User } from './users.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  // This is a placeholder for the actual implementation of the UsersService.
-  // In a real application, this service would interact with the database
-  // to perform CRUD operations on user entities.
+  private readonly logger = new Logger(UsersService.name);
 
-  // Example method to find a user by email
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) { }
+
   async findByEmail(email: string): Promise<User | null> {
-    // Placeholder implementation
-    return null;
+    this.logger.debug(`Finding user with email ${email}`);
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) {
+      this.logger.debug(`User with email ${email} not found`);
+      return null;
+    }
+    return user;
   }
 
   // Example method to verify a user's password

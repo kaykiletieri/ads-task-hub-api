@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import helmet from 'helmet';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../modules/auth/guards/jwt-auth.guard';
 import * as compression from 'compression';
 
 export function setupGlobalConfigurations(app: INestApplication): void {
