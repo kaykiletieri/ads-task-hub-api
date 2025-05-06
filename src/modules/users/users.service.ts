@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { User } from './users.entity';
 
 @Injectable()
 export class UsersService {
@@ -7,7 +8,7 @@ export class UsersService {
   // to perform CRUD operations on user entities.
 
   // Example method to find a user by email
-  async findByEmail(email: string): Promise<any> {
+  async findByEmail(email: string): Promise<User | null> {
     // Placeholder implementation
     return null;
   }

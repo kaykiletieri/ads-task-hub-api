@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -12,9 +13,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(email: string, password: string): Promise<User | null> {
     this.logger.debug(`Validating user with email: ${email}`);
-    const user = await this.usersService.findByEmail(email);
+    const user: User | null = await this.usersService.findByEmail(email);
 
     if (!user) {
       this.logger.warn(`User with email ${email} not found`);
@@ -24,24 +25,24 @@ export class AuthService {
     this.logger.debug(`User found: ${JSON.stringify(user, null, 2)}`);
     const isPasswordValid = await this.usersService.verifyPassword(
       password,
-      user.password,
+      user.password_hash,
     );
     this.logger.debug(`Password comparison result: ${isPasswordValid}`);
 
     if (isPasswordValid) {
-      const { password, ...result } = user;
       this.logger.debug(
         `User validated successfully, returning user data without passwordHash `,
         password,
       );
-      return result;
+
+      return user;
     }
 
     this.logger.warn(`Invalid password for user with email: ${email}`);
     return null;
   }
 
-  async login(user: AuthDto) {
+  async login(user: AuthDto): Promise<{ access_token: string }> {
     this.logger.debug(`Logging in user: ${JSON.stringify(user, null, 2)}`);
     const userEntity = await this.usersService.findByEmail(user.email);
     if (!userEntity) {
