@@ -16,7 +16,7 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
 
     private readonly passwordHasherService: PasswordHasherService,
-  ) { }
+  ) {}
 
   async findByEmail(email: string): Promise<User | null> {
     this.logger.debug(`Finding user with email ${email}`);
@@ -29,7 +29,9 @@ export class UsersService {
   }
 
   async createUser(userDto: CreateUserDto): Promise<UserResponseDto> {
-    this.logger.debug(`Creating user with data: ${JSON.stringify(userDto, null, 2)}`);
+    this.logger.debug(
+      `Creating user with data: ${JSON.stringify(userDto, null, 2)}`,
+    );
 
     const existingUser = await this.findByEmail(userDto.email);
     if (existingUser) {
@@ -37,19 +39,18 @@ export class UsersService {
       throw new BadRequestException('User already exists');
     }
 
-    const user: User = this.userRepository.create(
-      {
-        id: generateUUID(),
-        name: userDto.name,
-        email: userDto.email,
-        password_hash: await this.passwordHasherService.hashPassword(userDto.password),
-        role: userDto.role,
-        class: { id: userDto.classId },
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      },
-
-    );
+    const user: User = this.userRepository.create({
+      id: generateUUID(),
+      name: userDto.name,
+      email: userDto.email,
+      password_hash: await this.passwordHasherService.hashPassword(
+        userDto.password,
+      ),
+      role: userDto.role,
+      class: { id: userDto.classId },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
     await this.userRepository.save(user);
     this.logger.debug(`User created with ID: ${user.id}`);
 

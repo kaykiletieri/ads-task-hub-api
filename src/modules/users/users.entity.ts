@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Class } from '../classes/classes.entity';
 
 @Entity('users')
@@ -25,7 +31,7 @@ export class User {
   @ManyToOne(() => Class, (classEntity) => classEntity.users, {
     onDelete: 'SET NULL',
   })
-  @JoinColumn({ name: 'class_id', })
+  @JoinColumn({ name: 'class_id' })
   class: Class;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

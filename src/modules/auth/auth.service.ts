@@ -15,7 +15,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly passwordHasherService: PasswordHasherService,
-  ) { }
+  ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
     this.logger.debug(`Validating user with email: ${email}`);
@@ -34,7 +34,9 @@ export class AuthService {
     this.logger.debug(`Password comparison result: ${isPasswordValid}`);
 
     if (isPasswordValid) {
-      this.logger.debug(`User validated successfully, returning user data without passwordHash`);
+      this.logger.debug(
+        `User validated successfully, returning user data without passwordHash`,
+      );
       return user;
     }
 

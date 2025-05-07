@@ -9,7 +9,7 @@ import { LoginResponseDto } from './dto/login-response.dto';
 @Controller('auth')
 @ApiTags('Authentication')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -35,8 +35,7 @@ export class AuthController {
     status: 500,
     description: 'Internal server error.',
   })
-  async login(@Body() authDto: AuthDto)
-    : Promise<LoginResponseDto> {
+  async login(@Body() authDto: AuthDto): Promise<LoginResponseDto> {
     return this.authService.login(authDto);
   }
 }

@@ -28,4 +28,4 @@ import { PasswordHasherService } from './password-hasher.service';
   controllers: [AuthController],
   exports: [PasswordHasherService],
 })
-export class AuthModule { }
+export class AuthModule {}
