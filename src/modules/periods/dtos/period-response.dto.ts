@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNumber, IsEnum, IsDateString } from 'class-validator';
+import { ClassResponseDto } from 'src/modules/classes/dtos/class-response.dto';
 
 export class PeriodResponseDto {
   @IsString()
