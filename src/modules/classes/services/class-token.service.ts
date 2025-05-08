@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ClassToken } from '../entities/class-token.entity';
 import { Class } from '../entities/classes.entity';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -98,6 +98,37 @@ export class ClassTokenService {
             result += charset[randomIndex];
         }
         return result;
+    }
+
+    async getActiveClassTokensPaginated(page: number, limit: number): Promise<{ data: ClassToken[]; total: number }> {
+        this.logger.debug(`Fetching active class tokens with pagination: page ${page}, limit ${limit}`);
+
+        const [data, total] = await this.classTokenRepository.findAndCount({
+            where: {
+                expiration_date: MoreThan(new Date().toISOString()),
+            },
+            take: limit,
+            skip: (page - 1) * limit,
+            order: { created_at: 'DESC' },
+        });
+
+        return { data, total };
+    }
+
+    async getActiveClassTokensByClassPaginated(classId: string, page: number, limit: number): Promise<{ data: ClassToken[]; total: number }> {
+        this.logger.debug(`Fetching active class tokens for class ID ${classId} with pagination: page ${page}, limit ${limit}`);
+
+        const [data, total] = await this.classTokenRepository.findAndCount({
+            where: {
+                class: { id: classId },
+                expiration_date: MoreThan(new Date().toISOString()),
+            },
+            take: limit,
+            skip: (page - 1) * limit,
+            order: { created_at: 'DESC' },
+        });
+
+        return { data, total };
     }
 
     private getLastClassToken(classId: string): Promise<ClassToken | null> {

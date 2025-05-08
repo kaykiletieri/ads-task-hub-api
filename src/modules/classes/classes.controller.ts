@@ -21,11 +21,16 @@ import {
   ApiQuery,
   ApiParam,
 } from '@nestjs/swagger';
+import { ClassTokenService } from './services/class-token.service';
+import { ClassToken } from './entities/class-token.entity';
 
 @Controller('classes')
 @ApiTags('Classes')
 export class ClassesController {
-  constructor(private readonly classesService: ClassesService) {}
+  constructor(
+    private readonly classesService: ClassesService,
+    private readonly classTokenService: ClassTokenService
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -223,5 +228,55 @@ export class ClassesController {
     @Param('periodId') periodId: string,
   ): Promise<ClassResponseDto[]> {
     return this.classesService.getClassesByPeriod(periodId);
+  }
+
+  @Post(':id/token')
+  @ApiOperation({
+    summary: 'Generate a class token',
+    description: 'Generate a new class token for the specified class ID with an expiration date.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID of the class',
+    type: String,
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @ApiBody({
+    type: Object,
+    description: 'Class token generation data',
+    schema: {
+      type: 'object',
+      properties: {
+        expirationDate: {
+          type: 'string',
+          format: 'date-time',
+          description: 'Expiration date for the class token',
+          example: '2023-12-31T23:59:59.000Z',
+        },
+      },
+      required: ['expirationDate'],
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Successfully generated the class token.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request, invalid input data.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Class not found.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error.',
+  })
+  async generateClassToken(
+    @Param('id') id: string,
+    @Body() body: { expirationDate: Date },
+  ): Promise<ClassToken> {
+    return this.classTokenService.generateClassToken(id, new Date(body.expirationDate));
   }
 }
