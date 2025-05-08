@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsUUID,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateClassDto {
   @IsString()
@@ -12,23 +18,33 @@ export class CreateClassDto {
   })
   name: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Axis of the class (1 to 5)',
-    example: '1',
+    description: 'Class number',
+    example: 1,
     required: true,
-    type: 'string',
+    type: 'number',
   })
-  axis: string;
+  class_number: number;
 
   @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'Teacher name',
+    example: 'Kayki Letieri',
+    required: false,
+    type: 'string',
+  })
+  teacher_name?: string;
+
+  @IsUUID()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Period of the class (e.g., 2025/1)',
-    example: '2025/1',
+    description: 'ID of the period',
+    example: '123e4567-e89b-12d3-a456-426614174000',
     required: true,
     type: 'string',
   })
-  period: string;
+  period_id: string;
 }

@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
 import { Class } from '../classes/classes.entity';
 
 @Entity('periods')
@@ -16,7 +22,9 @@ export class Period {
   period_number: number;
 
   @Column({
-    type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: false,
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
     transformer: {
       from: (value: string) => value,
       to: (value: string) => value,
@@ -25,7 +33,10 @@ export class Period {
   created_at: string;
 
   @Column({
-    type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: false, onUpdate: 'CURRENT_TIMESTAMP',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
+    onUpdate: 'CURRENT_TIMESTAMP',
     transformer: {
       from: (value: string) => value,
       to: (value: string) => value,

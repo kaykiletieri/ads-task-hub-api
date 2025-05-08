@@ -1,8 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { User } from '../users/users.entity';
 import { Class } from '../classes/classes.entity';
 import { Period } from '../periods/periods.entity';
-import { join } from 'path';
 
 @Entity('tasks')
 export class Task {
@@ -13,11 +18,11 @@ export class Task {
   title: string;
 
   @Column({ nullable: true, type: 'text' })
-  description: string;
+  description?: string;
 
   @Column({
     type: 'enum',
-    enum: ['project', 'assignment', 'documentation', 'report'],
+    enum: ['project', 'task', 'assessment', 'metting'],
     default: 'project',
     nullable: false,
   })
@@ -42,7 +47,15 @@ export class Task {
   status: string;
 
   @Column({
-    type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: false,
+    type: 'varchar',
+    nullable: true,
+  })
+  link: string;
+
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
     transformer: {
       from: (value: string) => value,
       to: (value: string) => value,
@@ -51,7 +64,10 @@ export class Task {
   created_at: string;
 
   @Column({
-    type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: false, onUpdate: 'CURRENT_TIMESTAMP',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
+    onUpdate: 'CURRENT_TIMESTAMP',
     transformer: {
       from: (value: string) => value,
       to: (value: string) => value,

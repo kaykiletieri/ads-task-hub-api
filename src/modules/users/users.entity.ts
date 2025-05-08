@@ -30,7 +30,9 @@ export class User {
   role: 'student' | 'coordinator' | 'admin';
 
   @Column({
-    type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: false,
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
     transformer: {
       from: (value: string) => value,
       to: (value: string) => value,
@@ -39,7 +41,10 @@ export class User {
   created_at: string;
 
   @Column({
-    type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: false, onUpdate: 'CURRENT_TIMESTAMP',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
+    onUpdate: 'CURRENT_TIMESTAMP',
     transformer: {
       from: (value: string) => value,
       to: (value: string) => value,

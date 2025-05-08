@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsEnum, IsDateString } from 'class-validator';
 
 export class PeriodResponseDto {
   @IsString()
@@ -11,21 +11,49 @@ export class PeriodResponseDto {
   })
   id: string;
 
-  @IsString()
+  @IsNumber()
   @ApiProperty({
-    description: 'Name of the period',
-    example: '2023-2024',
+    description: 'Year of the period',
+    example: 2023,
     required: true,
+    type: 'number',
+  })
+  year: number;
+
+  @IsEnum(['1', '2'])
+  @ApiProperty({
+    description: 'Semester of the period',
+    example: '1',
+    required: true,
+    enum: ['1', '2'],
     type: 'string',
   })
-  name: string;
+  semester: '1' | '2';
 
   @IsNumber()
   @ApiProperty({
-    description: 'Level of the period',
+    description: 'Number of the period',
     example: 1,
     required: true,
     type: 'number',
   })
-  level: number;
+  period_number: number;
+
+  @IsDateString()
+  @ApiProperty({
+    description: 'Creation date of the period',
+    example: '2025-01-01T00:00:00Z',
+    required: true,
+    type: 'string',
+  })
+  created_at: string;
+
+  @IsDateString()
+  @ApiProperty({
+    description: 'Last update date of the period',
+    example: '2025-01-01T00:00:00Z',
+    required: true,
+    type: 'string',
+  })
+  updated_at: string;
 }

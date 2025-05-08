@@ -5,6 +5,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsUUID,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateTaskDto {
@@ -19,35 +20,56 @@ export class CreateTaskDto {
   title: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({
     description: 'Description of the task',
     example: 'Complete the first chapter exercises',
-    required: true,
+    required: false,
     type: 'string',
   })
-  description: string;
+  description?: string;
 
-  @IsEnum(['project', 'assignment', 'documentation', 'report'])
+  @IsEnum(['project', 'task', 'assessment', 'metting'])
   @IsNotEmpty()
   @ApiProperty({
     description: 'Type of the task',
     example: 'assignment',
     required: true,
-    enum: ['project', 'assignment', 'documentation', 'report'],
+    enum: ['project', 'task', 'assessment', 'metting'],
     type: 'string',
   })
-  type: 'project' | 'assignment' | 'documentation' | 'report';
+  type: 'project' | 'task' | 'assessment' | 'metting';
 
   @IsDateString()
   @IsNotEmpty()
   @ApiProperty({
     description: 'Deadline for the task',
-    example: '2023-10-01T00:00:00Z',
+    example: '2025-07-10T00:00:00Z',
     required: true,
     type: 'string',
   })
   deadline: string;
+
+  @IsEnum(['pending', 'canceled', 'completed'])
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Type of the task',
+    example: 'pending',
+    required: true,
+    enum: ['pending', 'canceled', 'completed'],
+    type: 'string',
+  })
+  status: 'pending' | 'canceled' | 'completed';
+
+  @IsUUID()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'ID of the user associated with the task',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    required: true,
+    type: 'string',
+  })
+  userId: string;
 
   @IsUUID()
   @IsNotEmpty()

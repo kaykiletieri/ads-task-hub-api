@@ -1,24 +1,35 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
 
 export class CreatePeriodDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Name of the period',
-    example: '2023-2024',
+    description: 'Year of the period',
+    example: 2023,
     required: true,
+    type: 'number',
+  })
+  year: number;
+
+  @IsEnum(['1', '2'])
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Semester of the period',
+    example: '1',
+    required: true,
+    enum: ['1', '2'],
     type: 'string',
   })
-  name: string;
+  semester: '1' | '2';
 
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Level of the period',
+    description: 'Number of the period',
     example: 1,
     required: true,
     type: 'number',
   })
-  level: number;
+  period_number: number;
 }

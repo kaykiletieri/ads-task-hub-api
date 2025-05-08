@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsUUID, IsNumber } from 'class-validator';
 
 export class UpdateClassDto {
   @IsString()
@@ -12,23 +12,33 @@ export class UpdateClassDto {
   })
   name?: string;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
   @ApiProperty({
-    description: 'Axis of the class (1 to 5)',
-    example: '2',
+    description: 'Class number',
+    example: 1,
     required: false,
-    type: 'string',
+    type: 'number',
   })
-  axis?: string;
+  class_number?: number;
 
   @IsString()
   @IsOptional()
   @ApiProperty({
-    description: 'Period of the class (e.g., 2025/1)',
-    example: '2025/2',
+    description: 'Teacher name',
+    example: 'Kayki Letieri',
     required: false,
     type: 'string',
   })
-  period?: string;
+  teacher_name?: string;
+
+  @IsUUID()
+  @IsOptional()
+  @ApiProperty({
+    description: 'ID of the period',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    required: false,
+    type: 'string',
+  })
+  period_id?: string;
 }
