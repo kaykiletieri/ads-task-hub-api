@@ -8,6 +8,7 @@ import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 import { ClassResponseDto } from '../dtos/class-response.dto';
 import { Period } from '../../periods/periods.entity';
 import { ClassToken } from '../entities/class-token.entity';
+import { ClassTokenService } from './class-token.service';
 
 @Injectable()
 export class ClassesService {
@@ -16,6 +17,7 @@ export class ClassesService {
   constructor(
     @InjectRepository(Class) private readonly classRepository: Repository<Class>,
     @InjectRepository(Period) private readonly  periodRepository: Repository<Period>,
+    private readonly classTokenService: ClassTokenService,
   ) {}
 
   async getAllClasses(
@@ -85,8 +87,11 @@ export class ClassesService {
     });
 
     await this.classRepository.save(classEntity);
-
     this.logger.debug(`Class created with ID: ${classEntity.id}`);
+
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 15);
+    this.classTokenService.generateClassToken(classEntity.id, expirationDate)
 
     return this.mapToResponseDto(classEntity);
   }
