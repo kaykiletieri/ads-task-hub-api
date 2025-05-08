@@ -47,7 +47,7 @@ export class UsersService {
         userDto.password,
       ),
       role: userDto.role,
-      class: { id: userDto.classId },
+      class: { id: userDto.class_id },
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     });
@@ -61,7 +61,7 @@ export class UsersService {
       role: user.role,
       created_at: user.created_at,
       updated_at: user.updated_at,
-      classId: user.class?.id,
+      class_id: user.class?.id,
     };
   }
 }
