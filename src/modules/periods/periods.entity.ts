@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
 import { Class } from '../classes/classes.entity';
 
 @Entity('periods')
@@ -6,24 +6,34 @@ export class Period {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   year: number;
 
-  @Column({ type: 'enum', enum: ['1', '2'], default: '1' })
+  @Column({ type: 'enum', enum: ['1', '2'], nullable: false })
   semester: string;
 
-  @Column()
-  axis: number;
+  @Column({ nullable: false })
+  period_number: number;
 
-  @Column({ unique: true })
-  unique_period: string; // Ex: 2025-1-Eixo1
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: false,
+    transformer: {
+      from: (value: string) => value,
+      to: (value: string) => value,
+    },
+  })
   created_at: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: false, onUpdate: 'CURRENT_TIMESTAMP',
+    transformer: {
+      from: (value: string) => value,
+      to: (value: string) => value,
+    },
+  })
   updated_at: string;
 
   @OneToMany(() => Class, (classEntity) => classEntity.period)
+  @JoinColumn({ name: 'class_id', referencedColumnName: 'id' })
   classes: Class[];
 }
