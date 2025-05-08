@@ -70,5 +70,5 @@ export class UserResponseDto {
     required: true,
     type: 'string',
   })
-  classId: string;
+  class_id: string;
 }

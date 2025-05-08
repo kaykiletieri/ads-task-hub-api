@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
 
 export class CreatePeriodDto {
   @IsNumber()

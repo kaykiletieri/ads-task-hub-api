@@ -83,7 +83,7 @@ export class TaskResponseDto {
     required: true,
     type: 'string',
   })
-  userId: string;
+  user_id: string;
 
   @IsUUID()
   @ApiProperty({
@@ -92,7 +92,7 @@ export class TaskResponseDto {
     required: true,
     type: 'string',
   })
-  classId: string;
+  class_id: string;
 
   @IsUUID()
   @ApiProperty({
@@ -101,5 +101,5 @@ export class TaskResponseDto {
     required: true,
     type: 'string',
   })
-  periodId: string;
+  period_id: string;
 }

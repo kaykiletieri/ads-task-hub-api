@@ -68,7 +68,7 @@ export class UpdateTaskDto {
     required: false,
     type: 'string',
   })
-  userId?: string;
+  user_id?: string;
 
   @IsUUID()
   @IsOptional()
@@ -78,7 +78,7 @@ export class UpdateTaskDto {
     required: false,
     type: 'string',
   })
-  classId?: string;
+  class_id?: string;
 
   @IsUUID()
   @IsOptional()
@@ -88,5 +88,5 @@ export class UpdateTaskDto {
     required: false,
     type: 'string',
   })
-  periodId?: string;
+  period_id?: string;
 }

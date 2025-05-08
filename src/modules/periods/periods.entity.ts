@@ -16,7 +16,7 @@ export class Period {
   year: number;
 
   @Column({ type: 'enum', enum: ['1', '2'], nullable: false })
-  semester: string;
+  semester: '1' | '2';
 
   @Column({ nullable: false })
   period_number: number;

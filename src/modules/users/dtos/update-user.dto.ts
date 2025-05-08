@@ -51,5 +51,5 @@ export class UpdateUserDto {
     required: false,
     type: 'string',
   })
-  classId?: string;
+  class_id?: string;
 }

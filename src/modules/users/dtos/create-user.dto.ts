@@ -51,5 +51,5 @@ export class CreateUserDto {
     required: true,
     type: 'string',
   })
-  classId: string;
+  class_id: string;
 }
