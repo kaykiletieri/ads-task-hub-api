@@ -4,8 +4,11 @@ import { User } from './users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { PasswordHasherService } from '../auth/password-hasher.service';
+import { Class } from '../classes/classes.entity';
+import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +17,9 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Class)
+    private readonly classRepository: Repository<Class>,
 
     private readonly passwordHasherService: PasswordHasherService,
   ) {}
@@ -51,9 +57,117 @@ export class UsersService {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     });
+
     await this.userRepository.save(user);
     this.logger.debug(`User created with ID: ${user.id}`);
 
+    return this.mapToResponseDto(user);
+  }
+
+  async getAllUsers(
+    queryDto: PaginationQueryDto,
+    classId?: string,
+  ): Promise<{ data: UserResponseDto[]; total: number }> {
+    const {
+      page = 1,
+      limit = 10,
+      order_by = 'created_at',
+      order_direction = 'DESC',
+    } = queryDto;
+
+    this.logger.debug(
+      `Fetching users - page: ${page}, limit: ${limit}, order by: ${order_by}, direction: ${order_direction}`,
+    );
+
+    const whereCondition = classId ? { class: { id: classId } } : {};
+
+    const [data, total] = await this.userRepository.findAndCount({
+      where: whereCondition,
+      take: limit,
+      skip: (page - 1) * limit,
+      order: { [order_by]: order_direction },
+      relations: ['class'],
+    });
+
+    this.logger.debug(`Found ${total} users`);
+
+    return {
+      data: data.map((userEntity) => this.mapToResponseDto(userEntity)),
+      total,
+    };
+  }
+
+  async getUserById(id: string): Promise<UserResponseDto> {
+    this.logger.debug(`Fetching user with ID: ${id}`);
+
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['class'],
+    });
+
+    if (!user) {
+      this.logger.warn(`User with ID: ${id} not found`);
+      throw new BadRequestException('User not found');
+    }
+
+    this.logger.debug(`Found user with ID: ${id}`);
+
+    return this.mapToResponseDto(user);
+  }
+
+  async updateUser(id: string, dto: UpdateUserDto): Promise<UserResponseDto> {
+    this.logger.debug(`Updating user with ID: ${id}`);
+
+    const userEntity = await this.userRepository.findOne({
+      where: { id },
+      relations: ['class'],
+    });
+
+    if (!userEntity) {
+      this.logger.warn(`User with ID: ${id} not found`);
+      throw new BadRequestException('User not found');
+    }
+
+    if (dto.class_id) {
+      const classEntity = await this.classRepository.findOne({
+        where: { id: dto.class_id },
+      });
+      if (!classEntity) {
+        this.logger.warn(`Class with ID: ${dto.class_id} not found`);
+        throw new BadRequestException('Class not found');
+      }
+      userEntity.class = classEntity;
+    }
+
+    userEntity.name = dto.name || userEntity.name;
+    userEntity.email = dto.email || userEntity.email;
+    userEntity.password_hash = dto.password || userEntity.password_hash;
+    userEntity.role = dto.role || userEntity.role;
+    userEntity.updated_at = new Date().toISOString();
+
+    await this.userRepository.save(userEntity);
+
+    this.logger.debug(`User updated with ID: ${userEntity.id}`);
+
+    return this.mapToResponseDto(userEntity);
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    this.logger.debug(`Deleting user with ID: ${id}`);
+
+    const userEntity = await this.userRepository.findOne({ where: { id } });
+
+    if (!userEntity) {
+      this.logger.warn(`User with ID: ${id} not found`);
+      throw new BadRequestException('User not found');
+    }
+
+    await this.userRepository.remove(userEntity);
+
+    this.logger.debug(`User with ID: ${id} deleted`);
+  }
+
+  private mapToResponseDto(user: User): UserResponseDto {
     return {
       id: user.id,
       name: user.name,
