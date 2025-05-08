@@ -127,6 +127,24 @@ export class ClassesService {
     this.logger.debug(`Class with ID: ${id} deleted`);
   }
 
+  async getClassesByPeriod(periodId: string): Promise<ClassResponseDto[]> {
+    this.logger.debug(`Fetching classes for period with ID: ${periodId}`);
+  
+    const classes = await this.classRepository.find({
+      where: { period: { id: periodId } },
+      relations: ['period'],
+    });
+  
+    if (classes.length === 0) {
+      this.logger.warn(`No classes found for period with ID: ${periodId}`);
+      throw new BadRequestException('No classes found for this period');
+    }
+  
+    this.logger.debug(`Found ${classes.length} classes for period with ID: ${periodId}`);
+  
+    return classes.map(classEntity => this.mapToResponseDto(classEntity));
+  }
+
   private mapToResponseDto(classEntity: Class): ClassResponseDto {
     return {
       id: classEntity.id,
