@@ -6,9 +6,7 @@ import { Period } from '../periods/periods.entity';
 import { Class } from './classes.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Class, Period]),
-  ],
+  imports: [TypeOrmModule.forFeature([Class, Period])],
   providers: [ClassesService],
   controllers: [ClassesController],
 })

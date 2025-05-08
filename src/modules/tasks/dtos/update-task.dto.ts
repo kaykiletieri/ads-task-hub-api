@@ -60,6 +60,16 @@ export class UpdateTaskDto {
   })
   status?: 'pending' | 'canceled' | 'completed';
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'Link to the task',
+    example: 'https://example.com/task/123',
+    required: false,
+    type: 'string',
+  })
+  link?: string;
+
   @IsUUID()
   @IsOptional()
   @ApiProperty({
@@ -79,14 +89,4 @@ export class UpdateTaskDto {
     type: 'string',
   })
   class_id?: string;
-
-  @IsUUID()
-  @IsOptional()
-  @ApiProperty({
-    description: 'ID of the period associated with the task',
-    example: '123e4567-e89b-12d3-a456-426614174001',
-    required: false,
-    type: 'string',
-  })
-  period_id?: string;
 }

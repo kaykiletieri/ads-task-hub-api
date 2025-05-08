@@ -20,9 +20,18 @@ export class ClassesService {
     private readonly periodRepository: Repository<Period>,
   ) {}
 
-  async getAllClasses(queryDto: PaginationQueryDto): Promise<{ data: ClassResponseDto[], total: number }> {
-    const { page = 1, limit = 10, order_by = 'created_at', order_direction = 'DESC' } = queryDto;
-    this.logger.debug(`Fetching classes - page: ${page}, limit: ${limit}, order by: ${order_by}, direction: ${order_direction}`);
+  async getAllClasses(
+    queryDto: PaginationQueryDto,
+  ): Promise<{ data: ClassResponseDto[]; total: number }> {
+    const {
+      page = 1,
+      limit = 10,
+      order_by = 'created_at',
+      order_direction = 'DESC',
+    } = queryDto;
+    this.logger.debug(
+      `Fetching classes - page: ${page}, limit: ${limit}, order by: ${order_by}, direction: ${order_direction}`,
+    );
 
     const [data, total] = await this.classRepository.findAndCount({
       take: limit,
@@ -56,9 +65,13 @@ export class ClassesService {
   }
 
   async createClass(dto: CreateClassDto): Promise<ClassResponseDto> {
-    this.logger.debug(`Creating class with name: ${dto.name}, period_id: ${dto.period_id}`);
+    this.logger.debug(
+      `Creating class with name: ${dto.name}, period_id: ${dto.period_id}`,
+    );
 
-    const period = await this.periodRepository.findOne({ where: { id: dto.period_id } });
+    const period = await this.periodRepository.findOne({
+      where: { id: dto.period_id },
+    });
 
     if (!period) {
       this.logger.warn(`Period with ID: ${dto.period_id} not found`);
@@ -81,10 +94,16 @@ export class ClassesService {
     return this.mapToResponseDto(classEntity);
   }
 
-  async updateClass(id: string, dto: UpdateClassDto): Promise<ClassResponseDto> {
+  async updateClass(
+    id: string,
+    dto: UpdateClassDto,
+  ): Promise<ClassResponseDto> {
     this.logger.debug(`Updating class with ID: ${id}`);
 
-    const classEntity = await this.classRepository.findOne({ where: { id }, relations: ['period'] });
+    const classEntity = await this.classRepository.findOne({
+      where: { id },
+      relations: ['period'],
+    });
 
     if (!classEntity) {
       this.logger.warn(`Class with ID: ${id} not found`);
@@ -92,7 +111,9 @@ export class ClassesService {
     }
 
     if (dto.period_id) {
-      const period = await this.periodRepository.findOne({ where: { id: dto.period_id } });
+      const period = await this.periodRepository.findOne({
+        where: { id: dto.period_id },
+      });
       if (!period) {
         this.logger.warn(`Period with ID: ${dto.period_id} not found`);
         throw new BadRequestException('Period not found');
@@ -129,20 +150,22 @@ export class ClassesService {
 
   async getClassesByPeriod(periodId: string): Promise<ClassResponseDto[]> {
     this.logger.debug(`Fetching classes for period with ID: ${periodId}`);
-  
+
     const classes = await this.classRepository.find({
       where: { period: { id: periodId } },
       relations: ['period'],
     });
-  
+
     if (classes.length === 0) {
       this.logger.warn(`No classes found for period with ID: ${periodId}`);
       throw new BadRequestException('No classes found for this period');
     }
-  
-    this.logger.debug(`Found ${classes.length} classes for period with ID: ${periodId}`);
-  
-    return classes.map(classEntity => this.mapToResponseDto(classEntity));
+
+    this.logger.debug(
+      `Found ${classes.length} classes for period with ID: ${periodId}`,
+    );
+
+    return classes.map((classEntity) => this.mapToResponseDto(classEntity));
   }
 
   private mapToResponseDto(classEntity: Class): ClassResponseDto {

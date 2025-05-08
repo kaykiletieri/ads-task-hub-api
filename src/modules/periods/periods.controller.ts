@@ -1,10 +1,25 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { PeriodsService } from './periods.service';
 import { PeriodResponseDto } from './dtos/period-response.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 import { CreatePeriodDto } from './dtos/create-period.dto';
 import { UpdatePeriodDto } from './dtos/update-period.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiQuery,
+} from '@nestjs/swagger';
 
 @Controller('periods')
 @ApiTags('Periods')
@@ -54,7 +69,9 @@ export class PeriodsController {
     status: 500,
     description: 'Internal server error.',
   })
-  async getAllPeriods(@Query() query: PaginationQueryDto): Promise<{ data: PeriodResponseDto[]; total: number }> {
+  async getAllPeriods(
+    @Query() query: PaginationQueryDto,
+  ): Promise<{ data: PeriodResponseDto[]; total: number }> {
     return this.periodsService.getAllPeriods(query);
   }
 
@@ -77,7 +94,9 @@ export class PeriodsController {
     status: 500,
     description: 'Internal server error.',
   })
-  async getPeriodsByYear(@Param('year') year: number): Promise<PeriodResponseDto[]> {
+  async getPeriodsByYear(
+    @Param('year') year: number,
+  ): Promise<PeriodResponseDto[]> {
     return this.periodsService.getPeriodsByYear(year);
   }
 
@@ -125,7 +144,9 @@ export class PeriodsController {
     status: 500,
     description: 'Internal server error.',
   })
-  async createPeriod(@Body() createPeriodDto: CreatePeriodDto): Promise<PeriodResponseDto> {
+  async createPeriod(
+    @Body() createPeriodDto: CreatePeriodDto,
+  ): Promise<PeriodResponseDto> {
     return this.periodsService.createPeriod(createPeriodDto);
   }
 
@@ -151,7 +172,10 @@ export class PeriodsController {
     status: 500,
     description: 'Internal server error.',
   })
-  async updatePeriod(@Param('id') id: string, @Body() updatePeriodDto: UpdatePeriodDto): Promise<PeriodResponseDto> {
+  async updatePeriod(
+    @Param('id') id: string,
+    @Body() updatePeriodDto: UpdatePeriodDto,
+  ): Promise<PeriodResponseDto> {
     return this.periodsService.updatePeriod(id, updatePeriodDto);
   }
 

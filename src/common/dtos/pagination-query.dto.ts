@@ -5,7 +5,7 @@ export class PaginationQueryDto {
   @IsInt()
   @Min(1)
   page?: number = 1;
-  
+
   @IsOptional()
   @IsInt()
   @Min(1)

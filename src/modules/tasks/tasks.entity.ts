@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { User } from '../users/users.entity';
 import { Class } from '../classes/classes.entity';
-import { Period } from '../periods/periods.entity';
 
 @Entity('tasks')
 export class Task {
@@ -26,7 +25,7 @@ export class Task {
     default: 'project',
     nullable: false,
   })
-  type: string;
+  type: 'project' | 'task' | 'assessment' | 'metting';
 
   @Column({
     type: 'date',
@@ -44,13 +43,13 @@ export class Task {
     default: 'pending',
     nullable: false,
   })
-  status: string;
+  status: 'pending' | 'canceled' | 'completed';
 
   @Column({
     type: 'varchar',
     nullable: true,
   })
-  link: string;
+  link?: string;
 
   @Column({
     type: 'timestamp',
@@ -82,8 +81,4 @@ export class Task {
   @ManyToOne(() => Class, (classEntity) => classEntity.id)
   @JoinColumn({ name: 'class_id', referencedColumnName: 'id' })
   class: Class;
-
-  @ManyToOne(() => Period, (period) => period.id)
-  @JoinColumn({ name: 'period_id', referencedColumnName: 'id' })
-  period: Period;
 }
