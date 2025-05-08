@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Period } from '../periods/periods.entity';
 import { User } from '../users/users.entity';
 
 @Entity('classes')
@@ -9,15 +10,11 @@ export class Class {
   @Column()
   name: string;
 
-  @Column({ type: 'enum', enum: ['1', '2', '3', '4', '5'], default: '1' })
-  axis: string;
+  @ManyToOne(() => Period, (period) => period.classes)
+  period: Period;
 
-  @Column({
-    type: 'enum',
-    enum: ['2025/1', '2025/2', '2026/1'],
-    default: '2025/1',
-  })
-  period: string;
+  @Column({ type: 'int', default: 1 })
+  class_number: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: string;
@@ -25,7 +22,7 @@ export class Class {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: string;
 
-  @OneToMany(() => User, (user) => user.class, {
+  @ManyToOne(() => User, (user) => user.class, {
     onDelete: 'SET NULL',
   })
   users: User[];

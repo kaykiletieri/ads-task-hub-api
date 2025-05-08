@@ -22,7 +22,7 @@ export class ClassResponseDto {
 
   @IsString()
   @ApiProperty({
-    description: 'axis of the class',
+    description: 'Axis of the class',
     example: '1',
     required: true,
     type: 'string',
@@ -31,7 +31,7 @@ export class ClassResponseDto {
 
   @IsString()
   @ApiProperty({
-    description: 'period of the class',
+    description: 'Period of the class',
     example: '2025/1',
     required: true,
     type: 'string',

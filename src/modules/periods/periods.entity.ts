@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Class } from '../classes/classes.entity';
 
 @Entity('periods')
 export class Period {
@@ -22,4 +23,7 @@ export class Period {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: string;
+
+  @OneToMany(() => Class, (classEntity) => classEntity.period)
+  classes: Class[];
 }
