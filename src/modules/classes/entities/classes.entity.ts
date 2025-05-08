@@ -6,16 +6,14 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { Period } from '../periods/periods.entity';
-import { User } from '../users/users.entity';
+import { Period } from '../../periods/periods.entity';
+import { User } from '../../users/users.entity';
+import { ClassToken } from './class-token.entity';
 
 @Entity('classes')
 export class Class {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column({ type: 'varchar', unique: true, nullable: false })
-  name: string;
 
   @Column({ type: 'int', default: 1, nullable: false })
   class_number: number;
@@ -53,4 +51,8 @@ export class Class {
   @ManyToOne(() => Period, (period) => period.classes, { nullable: false })
   @JoinColumn({ name: 'period_id', referencedColumnName: 'id' })
   period: Period;
+
+  @OneToMany(() => ClassToken, (classToken) => classToken.class)
+  @JoinColumn({ name: 'class_token_id', referencedColumnName: 'id' })
+  classTokens: ClassToken[];
 }

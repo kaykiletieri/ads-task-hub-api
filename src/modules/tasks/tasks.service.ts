@@ -7,7 +7,7 @@ import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 import { TaskResponseDto } from './dtos/task-response.dto';
-import { Class } from '../classes/classes.entity';
+import { Class } from '../classes/entities/classes.entity';
 
 @Injectable()
 export class TasksService {

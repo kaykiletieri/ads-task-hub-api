@@ -7,7 +7,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { PasswordHasherService } from '../auth/password-hasher.service';
-import { Class } from '../classes/classes.entity';
+import { Class } from '../classes/entities/classes.entity';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 
 @Injectable()
@@ -23,16 +23,6 @@ export class UsersService {
 
     private readonly passwordHasherService: PasswordHasherService,
   ) {}
-
-  async findByEmail(email: string): Promise<User | null> {
-    this.logger.debug(`Finding user with email ${email}`);
-    const user = await this.userRepository.findOne({ where: { email } });
-    if (!user) {
-      this.logger.debug(`User with email ${email} not found`);
-      return null;
-    }
-    return user;
-  }
 
   async createUser(userDto: CreateUserDto): Promise<UserResponseDto> {
     this.logger.debug(
@@ -177,5 +167,15 @@ export class UsersService {
       updated_at: user.updated_at,
       class_id: user.class?.id,
     };
+  }
+
+  private async findByEmail(email: string): Promise<User | null> {
+    this.logger.debug(`Finding user with email ${email}`);
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) {
+      this.logger.debug(`User with email ${email} not found`);
+      return null;
+    }
+    return user;
   }
 }

@@ -8,7 +8,7 @@ import {
   Body,
   Query,
 } from '@nestjs/common';
-import { ClassesService } from './classes.service';
+import { ClassesService } from './services/classes.service';
 import { ClassResponseDto } from './dtos/class-response.dto';
 import { CreateClassDto } from './dtos/create-class.dto';
 import { UpdateClassDto } from './dtos/update-class.dto';

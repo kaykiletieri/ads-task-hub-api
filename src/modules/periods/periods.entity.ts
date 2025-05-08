@@ -5,7 +5,7 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { Class } from '../classes/classes.entity';
+import { Class } from '../classes/entities/classes.entity';
 
 @Entity('periods')
 export class Period {

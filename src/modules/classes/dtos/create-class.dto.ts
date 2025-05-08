@@ -8,16 +8,6 @@ import {
 } from 'class-validator';
 
 export class CreateClassDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Name of the class (periodLevel:class)',
-    example: 'E2T1',
-    required: true,
-    type: 'string',
-  })
-  name: string;
-
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty({

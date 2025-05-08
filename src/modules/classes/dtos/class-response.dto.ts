@@ -17,15 +17,6 @@ export class ClassResponseDto {
   })
   id: string;
 
-  @IsString()
-  @ApiProperty({
-    description: 'Name of the class (periodLevel:class)',
-    example: 'E2T1',
-    required: true,
-    type: 'string',
-  })
-  name: string;
-
   @IsNumber()
   @ApiProperty({
     description: 'Class number',

@@ -1,23 +1,21 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Class } from './classes.entity';
-import { CreateClassDto } from './dtos/create-class.dto';
-import { UpdateClassDto } from './dtos/update-class.dto';
+import { Class } from '../entities/classes.entity';
+import { CreateClassDto } from '../dtos/create-class.dto';
+import { UpdateClassDto } from '../dtos/update-class.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
-import { ClassResponseDto } from './dtos/class-response.dto';
-import { Period } from '../periods/periods.entity';
+import { ClassResponseDto } from '../dtos/class-response.dto';
+import { Period } from '../../periods/periods.entity';
+import { ClassToken } from '../entities/class-token.entity';
 
 @Injectable()
 export class ClassesService {
   private readonly logger = new Logger(ClassesService.name);
 
   constructor(
-    @InjectRepository(Class)
-    private readonly classRepository: Repository<Class>,
-
-    @InjectRepository(Period)
-    private readonly periodRepository: Repository<Period>,
+    @InjectRepository(Class) private readonly classRepository: Repository<Class>,
+    @InjectRepository(Period) private readonly  periodRepository: Repository<Period>,
   ) {}
 
   async getAllClasses(
@@ -66,7 +64,7 @@ export class ClassesService {
 
   async createClass(dto: CreateClassDto): Promise<ClassResponseDto> {
     this.logger.debug(
-      `Creating class with name: ${dto.name}, period_id: ${dto.period_id}`,
+      `Creating class with number: ${dto.class_number}, period_id: ${dto.period_id}`,
     );
 
     const period = await this.periodRepository.findOne({
@@ -79,7 +77,6 @@ export class ClassesService {
     }
 
     const classEntity: Class = this.classRepository.create({
-      name: dto.name,
       class_number: dto.class_number,
       teacher_name: dto.teacher_name,
       period: { id: dto.period_id },
@@ -120,8 +117,6 @@ export class ClassesService {
       }
       classEntity.period = period;
     }
-
-    classEntity.name = dto.name || classEntity.name;
     classEntity.class_number = dto.class_number || classEntity.class_number;
     classEntity.teacher_name = dto.teacher_name || classEntity.teacher_name;
     classEntity.updated_at = new Date().toISOString();
@@ -171,7 +166,6 @@ export class ClassesService {
   private mapToResponseDto(classEntity: Class): ClassResponseDto {
     return {
       id: classEntity.id,
-      name: classEntity.name,
       class_number: classEntity.class_number,
       teacher_name: classEntity.teacher_name,
       period_id: classEntity.period.id,

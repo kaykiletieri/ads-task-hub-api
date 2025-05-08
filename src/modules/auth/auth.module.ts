@@ -1,17 +1,21 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersModule } from '../users/users.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PasswordHasherService } from './password-hasher.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../users/users.entity';
+import { ClassesModule } from '../classes/classes.module';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([User]),
     PassportModule,
+    ClassesModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -22,7 +26,6 @@ import { PasswordHasherService } from './password-hasher.service';
         },
       }),
     }),
-    forwardRef(() => UsersModule),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy, PasswordHasherService],
   controllers: [AuthController],
