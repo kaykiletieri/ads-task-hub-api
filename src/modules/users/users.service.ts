@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
-import { PasswordHasherService } from '../auth/password-hasher.service';
+import { PasswordHasherService } from '../auth/services/password-hasher.service';
 import { Class } from '../classes/entities/classes.entity';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 

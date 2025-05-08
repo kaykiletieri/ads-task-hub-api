@@ -1,15 +1,14 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
-import { AuthDto } from './dto/auth.dto';
-import { UsersService } from '../users/users.service';
+import { AuthDto } from '../dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/users.entity';
+import { User } from '../../users/users.entity';
 import { PasswordHasherService } from './password-hasher.service';
-import { LoginResponseDto } from './dto/login-response.dto';
-import { RegisterDto } from './dto/register.dto';
-import { ClassTokenService } from '../classes/services/class-token.service';
+import { LoginResponseDto } from '../dto/login-response.dto';
+import { RegisterDto } from '../dto/register.dto';
+import { ClassTokenService } from '../../classes/services/class-token.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
