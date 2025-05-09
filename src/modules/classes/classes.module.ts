@@ -8,9 +8,7 @@ import { ClassToken } from './entities/class-token.entity';
 import { ClassTokenService } from './services/class-token.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Class, ClassToken, Period]),
-  ],
+  imports: [TypeOrmModule.forFeature([Class, ClassToken, Period])],
   providers: [ClassesService, ClassTokenService],
   controllers: [ClassesController],
   exports: [ClassesService, ClassTokenService],

@@ -178,4 +178,34 @@ export class UsersService {
     }
     return user;
   }
+
+  async updateFcmToken(
+    userId: string,
+    fcmToken: string,
+  ): Promise<{ fcm_token: string }> {
+    this.logger.debug(`Updating fmc token from user ${userId}`);
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      this.logger.error(`User not found (${userId})`);
+      throw new Error('User not found');
+    }
+
+    if (user.fcm_token === fcmToken) {
+      this.logger.warn(
+        `The new fcm token is the same as the current one ${fcmToken}`,
+      );
+      throw new BadRequestException(
+        `The new fcm token is the same as the current one`,
+      );
+    }
+
+    user.fcm_token = fcmToken;
+    user.updated_at = new Date().toISOString();
+
+    this.userRepository.save(user);
+    this.logger.warn(`Updated fcm token for user ${userId}`);
+
+    return { fcm_token: user.fcm_token };
+  }
 }

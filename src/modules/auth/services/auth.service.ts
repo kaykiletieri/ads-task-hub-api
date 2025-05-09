@@ -56,7 +56,11 @@ export class AuthService {
       this.logger.warn(`User with email ${user.email} not found`);
       throw new BadRequestException('User not found');
     }
-    const payload: JwtPayload = { username: userEntity.name, sub: userEntity.id, role: userEntity.role };
+    const payload: JwtPayload = {
+      username: userEntity.name,
+      sub: userEntity.id,
+      role: userEntity.role,
+    };
     const token = this.jwtService.sign(payload);
     this.logger.debug(`Generated JWT Token: ${token}`);
     return {
@@ -67,7 +71,9 @@ export class AuthService {
   async register(dto: RegisterDto): Promise<LoginResponseDto> {
     this.logger.debug(`Registering user: ${JSON.stringify(dto, null, 2)}`);
 
-    const classEntity = await this.classTokenService.validateClassToken(dto.class_token);
+    const classEntity = await this.classTokenService.validateClassToken(
+      dto.class_token,
+    );
 
     const existingUser = await this.findByEmail(dto.email);
     if (existingUser) {
@@ -75,7 +81,9 @@ export class AuthService {
       throw new BadRequestException('User already exists');
     }
 
-    const hashedPassword = await this.passwordHasherService.hashPassword(dto.password);
+    const hashedPassword = await this.passwordHasherService.hashPassword(
+      dto.password,
+    );
 
     const user = this.userRepository.create({
       name: dto.name,
@@ -89,9 +97,15 @@ export class AuthService {
 
     await this.userRepository.save(user);
 
-    this.logger.debug(`User registered successfully: ${JSON.stringify(user, null, 2)}`);
+    this.logger.debug(
+      `User registered successfully: ${JSON.stringify(user, null, 2)}`,
+    );
 
-    const payload: JwtPayload = { username: user.name, sub: user.id, role: user.role };
+    const payload: JwtPayload = {
+      username: user.name,
+      sub: user.id,
+      role: user.role,
+    };
     const token = this.jwtService.sign(payload);
     this.logger.debug(`Generated JWT Token: ${token}`);
     return {

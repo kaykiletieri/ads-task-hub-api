@@ -7,6 +7,7 @@ import { Reflector } from '@nestjs/core';
 import helmet from 'helmet';
 import { JwtAuthGuard } from '../modules/auth/guards/jwt-auth.guard';
 import * as compression from 'compression';
+import { RolesGuard } from 'src/modules/auth/guards/role.guard';
 
 export function setupGlobalConfigurations(app: INestApplication): void {
   app.setGlobalPrefix('api');
@@ -26,7 +27,7 @@ export function setupGlobalConfigurations(app: INestApplication): void {
   app.use(compression());
 
   const reflector = app.get(Reflector);
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
+  app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector));
 
   app.useGlobalPipes(
     new ValidationPipe({

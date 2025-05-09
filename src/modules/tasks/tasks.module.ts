@@ -7,14 +7,8 @@ import { Task } from './tasks.entity';
 import { Class } from '../classes/entities/classes.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Task,
-      User,
-      Class,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([Task, User, Class])],
   providers: [TasksService],
   controllers: [TasksController],
 })
-export class TasksModule { }
+export class TasksModule {}

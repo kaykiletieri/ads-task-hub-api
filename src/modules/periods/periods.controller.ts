@@ -20,6 +20,7 @@ import {
   ApiBody,
   ApiQuery,
 } from '@nestjs/swagger';
+import { Roles } from '../auth/decorators/role.decorator';
 
 @Controller('periods')
 @ApiTags('Periods')
@@ -123,6 +124,7 @@ export class PeriodsController {
   }
 
   @Post()
+  @Roles('admin')
   @ApiOperation({
     summary: 'Create a new period',
     description: 'Create a new period with the provided data.',
@@ -155,6 +157,7 @@ export class PeriodsController {
     summary: 'Update an existing period',
     description: 'Update the period details by ID.',
   })
+  @Roles('admin')
   @ApiBody({
     type: UpdatePeriodDto,
     description: 'Period data to update the existing period.',
@@ -184,6 +187,7 @@ export class PeriodsController {
     summary: 'Delete a period',
     description: 'Delete a specific period by ID.',
   })
+  @Roles('admin')
   @ApiResponse({
     status: 200,
     description: 'Successfully deleted the period.',

@@ -30,6 +30,12 @@ export class User {
   role: 'student' | 'coordinator' | 'admin';
 
   @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  fcm_token: string;
+
+  @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     nullable: false,

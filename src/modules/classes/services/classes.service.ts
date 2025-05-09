@@ -15,8 +15,10 @@ export class ClassesService {
   private readonly logger = new Logger(ClassesService.name);
 
   constructor(
-    @InjectRepository(Class) private readonly classRepository: Repository<Class>,
-    @InjectRepository(Period) private readonly  periodRepository: Repository<Period>,
+    @InjectRepository(Class)
+    private readonly classRepository: Repository<Class>,
+    @InjectRepository(Period)
+    private readonly periodRepository: Repository<Period>,
     private readonly classTokenService: ClassTokenService,
   ) {}
 
@@ -91,7 +93,7 @@ export class ClassesService {
 
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 15);
-    this.classTokenService.generateClassToken(classEntity.id, expirationDate)
+    this.classTokenService.generateClassToken(classEntity.id, expirationDate);
 
     return this.mapToResponseDto(classEntity);
   }

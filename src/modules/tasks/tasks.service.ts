@@ -22,7 +22,7 @@ export class TasksService {
 
     @InjectRepository(Class)
     private readonly classRepository: Repository<Class>,
-  ) { }
+  ) {}
 
   async getAllTasks(
     queryDto: PaginationQueryDto,
@@ -65,7 +65,6 @@ export class TasksService {
       total,
     };
   }
-
 
   async getTaskById(id: string): Promise<TaskResponseDto> {
     this.logger.debug(`Fetching task with ID: ${id}`);

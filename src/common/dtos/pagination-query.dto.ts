@@ -1,19 +1,19 @@
-import { IsOptional, IsInt, Min } from 'class-validator';
+import { IsOptional, IsInt, Min, IsString } from 'class-validator';
 
 export class PaginationQueryDto {
   @IsOptional()
-  @IsInt()
-  @Min(1)
+  @IsString()
   page?: number = 1;
 
   @IsOptional()
-  @IsInt()
-  @Min(1)
+  @IsString()
   limit?: number = 10;
 
   @IsOptional()
+  @IsString()
   order_by?: string;
 
   @IsOptional()
+  @IsString()
   order_direction?: 'ASC' | 'DESC';
 }

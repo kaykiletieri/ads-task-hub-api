@@ -45,6 +45,7 @@ export class AuthController {
     summary: 'Register a new user',
     description: 'Registers a new user in the system with a class token.',
   })
+  @Public()
   @ApiBody({
     type: RegisterDto,
     description: 'User details and class token for registration.',
