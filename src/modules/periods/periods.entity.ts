@@ -44,6 +44,9 @@ export class Period {
   })
   updated_at: string;
 
+  @Column({ type: 'boolean', default: true, nullable: false })
+  is_active: boolean;
+
   @OneToMany(() => Class, (classEntity) => classEntity.period)
   @JoinColumn({ name: 'class_id', referencedColumnName: 'id' })
   classes: Class[];

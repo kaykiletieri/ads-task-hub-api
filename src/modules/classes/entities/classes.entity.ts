@@ -44,6 +44,9 @@ export class Class {
   })
   updated_at: string;
 
+  @Column({ type: 'boolean', default: true, nullable: false })
+  is_active: boolean;
+
   @OneToMany(() => User, (user) => user.class)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   users: User[];

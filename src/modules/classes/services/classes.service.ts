@@ -7,7 +7,6 @@ import { UpdateClassDto } from '../dtos/update-class.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
 import { ClassResponseDto } from '../dtos/class-response.dto';
 import { Period } from '../../periods/periods.entity';
-import { ClassToken } from '../entities/class-token.entity';
 import { ClassTokenService } from './class-token.service';
 
 @Injectable()
@@ -37,6 +36,7 @@ export class ClassesService {
 
     const [data, total] = await this.classRepository.findAndCount({
       take: limit,
+      where: { is_active: true },
       skip: (page - 1) * limit,
       order: { [order_by]: order_direction },
     });
@@ -53,7 +53,7 @@ export class ClassesService {
     this.logger.debug(`Fetching class with ID: ${id}`);
 
     const classEntity = await this.classRepository.findOne({
-      where: { id },
+      where: { id, is_active: true },
     });
 
     if (!classEntity) {
@@ -86,6 +86,7 @@ export class ClassesService {
       period: { id: dto.period_id },
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      is_active: true,
     });
 
     await this.classRepository.save(classEntity);
@@ -127,6 +128,7 @@ export class ClassesService {
     classEntity.class_number = dto.class_number || classEntity.class_number;
     classEntity.teacher_name = dto.teacher_name || classEntity.teacher_name;
     classEntity.updated_at = new Date().toISOString();
+    classEntity.is_active = dto.is_active !== undefined ? dto.is_active : classEntity.is_active;
 
     await this.classRepository.save(classEntity);
 

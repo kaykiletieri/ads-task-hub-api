@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsUUID, IsNumber } from 'class-validator';
+import { IsString, IsOptional, IsUUID, IsNumber, IsBoolean } from 'class-validator';
 
 export class UpdateClassDto {
   @IsNumber()
@@ -31,4 +31,13 @@ export class UpdateClassDto {
     type: 'string',
   })
   period_id?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty({
+    description: 'Is the class active?',
+    example: true,
+    required: false,
+  })
+  is_active?: boolean;
 }

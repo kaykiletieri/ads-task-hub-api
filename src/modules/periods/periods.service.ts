@@ -32,6 +32,7 @@ export class PeriodsService {
     const [data, total] = await this.periodRepository.findAndCount({
       take: limit,
       skip: (page - 1) * limit,
+      where: { is_active: true },
       order: { [order_by]: order_direction },
     });
 
@@ -47,7 +48,7 @@ export class PeriodsService {
     this.logger.debug(`Fetching periods for year: ${year}`);
 
     const periods = await this.periodRepository.find({
-      where: { year },
+      where: { year, is_active: true },
       order: { semester: 'ASC', period_number: 'ASC' },
     });
 
@@ -60,7 +61,7 @@ export class PeriodsService {
     this.logger.debug(`Fetching period with ID: ${id}`);
 
     const period = await this.periodRepository.findOne({
-      where: { id },
+      where: { id, is_active: true },
     });
 
     if (!period) {
@@ -99,6 +100,7 @@ export class PeriodsService {
       period_number: dto.period_number,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      is_active: true,
     });
 
     await this.periodRepository.save(period);
@@ -127,6 +129,7 @@ export class PeriodsService {
     period.semester = dto.semester || period.semester;
     period.period_number = dto.period_number || period.period_number;
     period.updated_at = new Date().toISOString();
+    period.is_active = dto.is_active !== undefined ? dto.is_active : period.is_active;
 
     await this.periodRepository.save(period);
 
