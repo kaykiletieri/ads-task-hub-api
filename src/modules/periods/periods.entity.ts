@@ -5,10 +5,12 @@ import {
   OneToMany,
   UpdateDateColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { Class } from '../classes/entities/classes.entity';
 
 @Entity('periods')
+@Index('idx_period_is_active', ['is_active'])
 export class Period {
   @PrimaryGeneratedColumn('uuid')
   id: string;

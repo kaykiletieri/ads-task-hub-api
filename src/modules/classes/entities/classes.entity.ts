@@ -7,12 +7,15 @@ import {
   OneToMany,
   UpdateDateColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { Period } from '../../periods/periods.entity';
 import { User } from '../../users/users.entity';
 import { ClassToken } from './class-token.entity';
 
 @Entity('classes')
+@Index('idx_class_period_active', ['period', 'is_active'])
+@Index('idx_class_is_active', ['is_active'])
 export class Class {
   @PrimaryGeneratedColumn('uuid')
   id: string;

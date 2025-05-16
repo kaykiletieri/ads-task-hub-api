@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -11,6 +12,9 @@ import { Task } from './tasks.entity';
 import { User } from 'src/modules/users/users.entity';
 
 @Entity('task_assignments')
+@Index('idx_ta_user_id', ['user'])
+@Index('idx_ta_user_status', ['user', 'status'])
+@Index('idx_ta_task_id', ['task'])
 export class TaskAssignment {
   @PrimaryGeneratedColumn('uuid')
   id: string;

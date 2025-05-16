@@ -7,11 +7,18 @@ import {
   OneToMany,
   JoinColumn,
   ManyToOne,
+  Index,
 } from 'typeorm';
 import { TaskAssignment } from './task_assignment.entity';
 import { User } from 'src/modules/users/users.entity';
 
 @Entity('tasks')
+@Index('idx_task_type', ['type'])
+@Index('idx_task_availability_status', ['availability_status'])
+@Index('idx_task_created_at', ['created_at'])
+@Index('idx_task_created_by', ['created_by'])
+@Index('idx_task_updated_by', ['updated_by'])
+@Index('idx_task_type_avail', ['type', 'availability_status'])
 export class Task {
   @PrimaryGeneratedColumn('uuid')
   id: string;

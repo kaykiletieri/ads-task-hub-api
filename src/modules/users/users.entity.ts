@@ -7,12 +7,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Index,
 } from 'typeorm';
 import { Class } from '../classes/entities/classes.entity';
 import { TaskAssignment } from '../tasks/entities/task_assignment.entity';
 import { Task } from '../tasks/entities/tasks.entity';
 
 @Entity('users')
+@Index('idx_user_class_id', ['class'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
