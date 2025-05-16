@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNumber, IsString, IsUUID } from 'class-validator';
+import { IsBoolean, IsDateString, IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class ClassResponseDto {
   @IsString()
@@ -37,6 +37,14 @@ export class ClassResponseDto {
     type: 'string',
   })
   period_id: string;
+
+  @IsBoolean()
+  @ApiProperty({
+    description: 'Is the class active?',
+    example: true,
+    required: true,
+  })
+  is_active: boolean;
 
   @IsDateString()
   @ApiProperty({

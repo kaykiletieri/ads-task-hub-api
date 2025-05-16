@@ -182,6 +182,7 @@ export class ClassesService {
       class_number: classEntity.class_number,
       teacher_name: classEntity.teacher_name,
       period_id: classEntity.period.id,
+      is_active: classEntity.is_active,
       created_at: classEntity.created_at.toDateString(),
       updated_at: classEntity.updated_at.toDateString(),
     };
