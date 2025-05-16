@@ -3,7 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
-  JoinColumn,
+  UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Class } from '../classes/entities/classes.entity';
 
@@ -15,39 +16,37 @@ export class Period {
   @Column({ nullable: false })
   year: number;
 
-  @Column({ type: 'enum', enum: ['1', '2'], nullable: false })
+  @Column({
+    type: 'enum',
+    enum: ['1', '2'],
+    nullable: false,
+    transformer: {
+      from: (value: string) => value,
+      to: (value: string) => value,
+    },
+  })
   semester: '1' | '2';
 
   @Column({ nullable: false })
   period_number: number;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-    transformer: {
-      from: (value: string) => value,
-      to: (value: string) => value,
-    },
-  })
-  created_at: string;
-
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-    onUpdate: 'CURRENT_TIMESTAMP',
-    transformer: {
-      from: (value: string) => value,
-      to: (value: string) => value,
-    },
-  })
-  updated_at: string;
-
   @Column({ type: 'boolean', default: true, nullable: false })
   is_active: boolean;
 
+  @CreateDateColumn({
+    type: 'timestamptz',
+    name: 'created_at',
+    default: () => 'now()',
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    name: 'updated_at',
+    default: () => 'now()',
+  })
+  updated_at: Date;
+
   @OneToMany(() => Class, (classEntity) => classEntity.period)
-  @JoinColumn({ name: 'class_id', referencedColumnName: 'id' })
   classes: Class[];
 }

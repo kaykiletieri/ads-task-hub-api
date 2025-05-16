@@ -5,6 +5,8 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Period } from '../../periods/periods.entity';
 import { User } from '../../users/users.entity';
@@ -21,34 +23,24 @@ export class Class {
   @Column({ type: 'varchar', nullable: true })
   teacher_name?: string;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-    transformer: {
-      from: (value: string) => value,
-      to: (value: string) => value,
-    },
+  @CreateDateColumn({
+    type: 'timestamptz',
+    name: 'created_at',
+    default: () => 'now()',
   })
-  created_at: string;
+  created_at: Date;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-    onUpdate: 'CURRENT_TIMESTAMP',
-    transformer: {
-      from: (value: string) => value,
-      to: (value: string) => value,
-    },
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    name: 'updated_at',
+    default: () => 'now()',
   })
-  updated_at: string;
+  updated_at: Date;
 
   @Column({ type: 'boolean', default: true, nullable: false })
   is_active: boolean;
 
   @OneToMany(() => User, (user) => user.class)
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   users: User[];
 
   @ManyToOne(() => Period, (period) => period.classes, { nullable: false })
@@ -56,6 +48,5 @@ export class Class {
   period: Period;
 
   @OneToMany(() => ClassToken, (classToken) => classToken.class)
-  @JoinColumn({ name: 'class_token_id', referencedColumnName: 'id' })
   classTokens: ClassToken[];
 }

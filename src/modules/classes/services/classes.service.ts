@@ -94,7 +94,10 @@ export class ClassesService {
 
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 15);
-    this.classTokenService.generateClassToken(classEntity.id, expirationDate);
+    await this.classTokenService.generateClassToken(
+      classEntity.id,
+      expirationDate,
+    );
 
     return this.mapToResponseDto(classEntity);
   }
@@ -127,8 +130,9 @@ export class ClassesService {
     }
     classEntity.class_number = dto.class_number || classEntity.class_number;
     classEntity.teacher_name = dto.teacher_name || classEntity.teacher_name;
-    classEntity.updated_at = new Date().toISOString();
-    classEntity.is_active = dto.is_active !== undefined ? dto.is_active : classEntity.is_active;
+    classEntity.updated_at = new Date();
+    classEntity.is_active =
+      dto.is_active !== undefined ? dto.is_active : classEntity.is_active;
 
     await this.classRepository.save(classEntity);
 
@@ -178,8 +182,8 @@ export class ClassesService {
       class_number: classEntity.class_number,
       teacher_name: classEntity.teacher_name,
       period_id: classEntity.period.id,
-      created_at: classEntity.created_at,
-      updated_at: classEntity.updated_at,
+      created_at: classEntity.created_at.toDateString(),
+      updated_at: classEntity.updated_at.toDateString(),
     };
   }
 }

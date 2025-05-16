@@ -133,7 +133,7 @@ export class UsersService {
     userEntity.email = dto.email || userEntity.email;
     userEntity.password_hash = dto.password || userEntity.password_hash;
     userEntity.role = dto.role || userEntity.role;
-    userEntity.updated_at = new Date().toISOString();
+    userEntity.updated_at = new Date();
 
     await this.userRepository.save(userEntity);
 
@@ -163,8 +163,8 @@ export class UsersService {
       name: user.name,
       email: user.email,
       role: user.role,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
+      created_at: user.created_at.toDateString(),
+      updated_at: user.updated_at.toDateString(),
       class_id: user.class?.id,
     };
   }
@@ -201,9 +201,9 @@ export class UsersService {
     }
 
     user.fcm_token = fcmToken;
-    user.updated_at = new Date().toISOString();
+    user.updated_at = new Date();
 
-    this.userRepository.save(user);
+    await this.userRepository.save(user);
     this.logger.warn(`Updated fcm token for user ${userId}`);
 
     return { fcm_token: user.fcm_token };

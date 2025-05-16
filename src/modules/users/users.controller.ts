@@ -205,6 +205,9 @@ export class UsersController {
     @Param('userId') userId: string,
     @Body() updateFcmTokenDto: UpdateFcmTokenDto,
   ) {
-    return this.usersService.updateFcmToken(userId, updateFcmTokenDto.fcm_token);
+    return this.usersService.updateFcmToken(
+      userId,
+      updateFcmTokenDto.fcm_token,
+    );
   }
 }

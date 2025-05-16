@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Class } from './classes.entity';
 
@@ -36,16 +37,12 @@ export class ClassToken {
   })
   token_number: number;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-    transformer: {
-      from: (value: string) => value,
-      to: (value: string) => value,
-    },
+  @CreateDateColumn({
+    type: 'timestamptz',
+    name: 'created_at',
+    default: () => 'now()',
   })
-  created_at: string;
+  created_at: Date;
 
   @ManyToOne(() => Class, (classEntity) => classEntity.classTokens)
   @JoinColumn({ name: 'class_id', referencedColumnName: 'id' })

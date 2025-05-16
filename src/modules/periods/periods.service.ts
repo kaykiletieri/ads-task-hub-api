@@ -129,7 +129,8 @@ export class PeriodsService {
     period.semester = dto.semester || period.semester;
     period.period_number = dto.period_number || period.period_number;
     period.updated_at = new Date().toISOString();
-    period.is_active = dto.is_active !== undefined ? dto.is_active : period.is_active;
+    period.is_active =
+      dto.is_active !== undefined ? dto.is_active : period.is_active;
 
     await this.periodRepository.save(period);
 

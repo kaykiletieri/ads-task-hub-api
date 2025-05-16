@@ -25,10 +25,7 @@ describe('AuthService', () => {
       sign: jest.fn(),
     };
 
-    authService = new AuthService(
-      usersService as UsersService,
-      jwtService as JwtService,
-    );
+    authService = new AuthService(usersService, jwtService as JwtService);
   });
 
   describe('validateUser', () => {

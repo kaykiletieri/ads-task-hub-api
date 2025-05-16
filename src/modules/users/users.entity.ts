@@ -4,8 +4,12 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Class } from '../classes/entities/classes.entity';
+import { TaskAssignment } from '../tasks/entities/task_assignment.entity';
 
 @Entity('users')
 export class User {
@@ -22,45 +26,43 @@ export class User {
   password_hash: string;
 
   @Column({
-    type: 'enum',
-    enum: ['student', 'coordinator', 'admin'],
-    default: 'student',
-    nullable: false,
-  })
-  role: 'student' | 'coordinator' | 'admin';
-
-  @Column({
     type: 'varchar',
     nullable: true,
   })
   fcm_token: string;
 
   @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
+    type: 'enum',
+    enum: ['student', 'coordinator', 'admin'],
+    default: 'student',
     nullable: false,
     transformer: {
       from: (value: string) => value,
       to: (value: string) => value,
     },
   })
-  created_at: string;
+  role: 'student' | 'coordinator' | 'admin';
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-    onUpdate: 'CURRENT_TIMESTAMP',
-    transformer: {
-      from: (value: string) => value,
-      to: (value: string) => value,
-    },
+  @CreateDateColumn({
+    type: 'timestamptz',
+    name: 'created_at',
+    default: () => 'now()',
   })
-  updated_at: string;
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    name: 'updated_at',
+    default: () => 'now()',
+  })
+  updated_at: Date;
 
   @ManyToOne(() => Class, (classEntity) => classEntity.users, {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'class_id' })
   class: Class;
+
+  @OneToMany(() => TaskAssignment, (taskAssignment) => taskAssignment.user)
+  task_assignments?: TaskAssignment[];
 }
