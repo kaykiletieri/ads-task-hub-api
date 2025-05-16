@@ -54,8 +54,8 @@ export class ClassesService {
     this.logger.debug(`Fetching class with ID: ${id}`);
 
     const classEntity = await this.classRepository.findOne({
-      where: { id, is_active: true,  },
-      relations: ['period'], 
+      where: { id, is_active: true },
+      relations: ['period'],
     });
 
     if (!classEntity) {

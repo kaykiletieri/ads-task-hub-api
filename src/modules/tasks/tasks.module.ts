@@ -9,7 +9,9 @@ import { TaskAssignment } from './entities/task_assignment.entity';
 import { Period } from '../periods/periods.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task, TaskAssignment, User, Class, Period])],
+  imports: [
+    TypeOrmModule.forFeature([Task, TaskAssignment, User, Class, Period]),
+  ],
   providers: [TasksService],
   controllers: [TasksController],
 })

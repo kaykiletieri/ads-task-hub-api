@@ -67,9 +67,9 @@ export class User {
   @OneToMany(() => TaskAssignment, (taskAssignment) => taskAssignment.user)
   task_assignments?: TaskAssignment[];
 
-  @OneToMany(() => Task, task => task.created_by)
+  @OneToMany(() => Task, (task) => task.created_by)
   created_tasks: Task[];
 
-  @OneToMany(() => Task, task => task.updated_by)
+  @OneToMany(() => Task, (task) => task.updated_by)
   updated_tasks: Task[];
 }

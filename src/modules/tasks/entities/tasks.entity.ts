@@ -89,16 +89,18 @@ export class Task {
   @OneToMany(() => TaskAssignment, (taskAssignment) => taskAssignment.task)
   task_assignments?: TaskAssignment[];
 
-  @ManyToOne(() => User, user => user.created_tasks, {
+  @ManyToOne(() => User, (user) => user.created_tasks, {
     nullable: false,
     onDelete: 'SET NULL',
+    eager: false,
   })
   @JoinColumn({ name: 'created_by' })
   created_by: User;
 
-  @ManyToOne(() => User, user => user.updated_tasks, {
+  @ManyToOne(() => User, (user) => user.updated_tasks, {
     nullable: false,
     onDelete: 'SET NULL',
+    eager: false,
   })
   @JoinColumn({ name: 'updated_by' })
   updated_by: User;

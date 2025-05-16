@@ -7,6 +7,7 @@ import { Class } from '../classes/entities/classes.entity';
 import { TaskAssignment } from './entities/task_assignment.entity';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { Period } from '../periods/periods.entity';
+import { TaskResponseDto } from './dtos/task-response.dto';
 
 @Injectable()
 export class TasksService {
@@ -27,12 +28,13 @@ export class TasksService {
 
     @InjectRepository(Period)
     private readonly periodRepository: Repository<Period>,
-  ) { }
+  ) {}
 
   async createTaskForUser(
     userId: string,
     creatorId: string,
-    taskData: CreateTaskDto) : Promise<Task> {
+    taskData: CreateTaskDto,
+  ): Promise<TaskResponseDto> {
     this.logger.log(`Creating task for user with ID: ${userId}`);
 
     const user = await this.userRepository.findOne({ where: { id: userId } });
@@ -41,7 +43,9 @@ export class TasksService {
       throw new NotFoundException('User not found');
     }
 
-    const creator = await this.userRepository.findOne({ where: { id: creatorId } });
+    const creator = await this.userRepository.findOne({
+      where: { id: creatorId },
+    });
     if (!creator) {
       this.logger.error(`Creator with ID ${creatorId} not found`);
       throw new NotFoundException('Creator not found');
@@ -59,30 +63,45 @@ export class TasksService {
       updated_by: creator,
     });
 
-    const taskAssignment: TaskAssignment = this.taskAssignmentRepository.create({
-      status: 'pending',
-      task,
-      user,
-    });
+    const createdTask = await this.taskRepository.save(task);
+
+    const taskAssignment: TaskAssignment = this.taskAssignmentRepository.create(
+      {
+        status: 'pending',
+        task: createdTask,
+        user,
+      },
+    );
 
     await this.taskAssignmentRepository.save(taskAssignment);
 
-    return this.taskRepository.save(task);
+    const dto: TaskResponseDto = {
+      ...createdTask,
+      created_by: createdTask.created_by.id,
+      updated_by: createdTask.updated_by.id,
+    };
+
+    return dto;
   }
 
   async createTaskForClass(
     classId: string,
     creatorId: string,
-    taskData: CreateTaskDto) : Promise<Task> {
+    taskData: CreateTaskDto,
+  ): Promise<TaskResponseDto> {
     this.logger.log(`Creating task for class with ID: ${classId}`);
 
-    const classEntity = await this.classRepository.findOne({ where: { id: classId, is_active: true } });
+    const classEntity = await this.classRepository.findOne({
+      where: { id: classId, is_active: true },
+    });
     if (!classEntity) {
       this.logger.warn(`Class with ID ${classId} not found`);
       throw new NotFoundException('Class not found');
     }
 
-    const creator = await this.userRepository.findOne({ where: { id: creatorId } });
+    const creator = await this.userRepository.findOne({
+      where: { id: creatorId },
+    });
     if (!creator) {
       this.logger.error(`Creator with ID ${creatorId} not found`);
       throw new NotFoundException('Creator not found');
@@ -100,45 +119,62 @@ export class TasksService {
       updated_by: creator,
     });
 
-    const users = await this.userRepository.find({ where: { class: { id: classId } } });
+    const users = await this.userRepository.find({
+      where: { class: { id: classId } },
+    });
 
     if (users.length === 0) {
       this.logger.warn(`No users found`);
       throw new NotFoundException('No users found');
     }
 
-    const taskAssignments = users.map(user => {
+    const createdTask = await this.taskRepository.save(task);
+
+    const taskAssignments = users.map((user) => {
       return this.taskAssignmentRepository.create({
         status: 'pending',
-        task,
+        task: createdTask,
         user,
       });
     });
 
     await this.taskAssignmentRepository.save(taskAssignments);
 
-    return this.taskRepository.save(task);
+    const dto: TaskResponseDto = {
+      ...createdTask,
+      created_by: createdTask.created_by.id,
+      updated_by: createdTask.updated_by.id,
+    };
+
+    return dto;
   }
 
   async createTaskForPeriod(
     periodId: string,
     creatorId: string,
-    taskData: CreateTaskDto) : Promise<Task> {
+    taskData: CreateTaskDto,
+  ): Promise<TaskResponseDto> {
     this.logger.log(`Creating task for period with ID: ${periodId}`);
 
-    const period = await this.periodRepository.findOne({ where: { id: periodId, is_active: true } });
+    const period = await this.periodRepository.findOne({
+      where: { id: periodId, is_active: true },
+    });
     if (!period) {
       this.logger.warn(`Period with ID ${periodId} not found`);
       throw new NotFoundException('Period not found');
     }
 
-    const creator = await this.userRepository.findOne({ where: { id: creatorId } });
+    const creator = await this.userRepository.findOne({
+      where: { id: creatorId },
+    });
     if (!creator) {
       this.logger.error(`Creator with ID ${creatorId} not found`);
       throw new NotFoundException('Creator not found');
     }
 
-    const classes: Class[] = await this.classRepository.find({ where: { period: { id: periodId }, is_active: true } });
+    const classes: Class[] = await this.classRepository.find({
+      where: { period: { id: periodId }, is_active: true },
+    });
 
     const task: Task = this.taskRepository.create({
       title: taskData.title,
@@ -154,7 +190,7 @@ export class TasksService {
 
     const users = await this.userRepository.find({
       where: {
-        class: { id: In(classes.map(classEntity => classEntity.id)) },
+        class: { id: In(classes.map((classEntity) => classEntity.id)) },
       },
     });
 
@@ -163,25 +199,36 @@ export class TasksService {
       throw new NotFoundException('No users found');
     }
 
-    const taskAssignments = users.map(user => {
+    const createdTask = await this.taskRepository.save(task);
+
+    const taskAssignments = users.map((user) => {
       return this.taskAssignmentRepository.create({
         status: 'pending',
-        task,
+        task: createdTask,
         user,
       });
     });
 
     await this.taskAssignmentRepository.save(taskAssignments);
 
-    return this.taskRepository.save(task);
+    const dto: TaskResponseDto = {
+      ...createdTask,
+      created_by: createdTask.created_by.id,
+      updated_by: createdTask.updated_by.id,
+    };
+
+    return dto;
   }
 
   async createTaskForAllUsers(
     creatorId: string,
-    taskData: CreateTaskDto) : Promise<Task> {
+    taskData: CreateTaskDto,
+  ): Promise<TaskResponseDto> {
     this.logger.log(`Creating task for all users`);
 
-    const creator = await this.userRepository.findOne({ where: { id: creatorId } });
+    const creator = await this.userRepository.findOne({
+      where: { id: creatorId },
+    });
     if (!creator) {
       this.logger.error(`Creator with ID ${creatorId} not found`);
       throw new NotFoundException('Creator not found');
@@ -206,16 +253,24 @@ export class TasksService {
       throw new NotFoundException('No users found');
     }
 
-    const taskAssignments = users.map(user => {
+    const createdTask = await this.taskRepository.save(task);
+
+    const taskAssignments = users.map((user) => {
       return this.taskAssignmentRepository.create({
         status: 'pending',
-        task,
+        task: createdTask,
         user,
       });
     });
 
     await this.taskAssignmentRepository.save(taskAssignments);
 
-    return this.taskRepository.save(task);
+    const dto: TaskResponseDto = {
+      ...createdTask,
+      created_by: createdTask.created_by.id,
+      updated_by: createdTask.updated_by.id,
+    };
+
+    return dto;
   }
 }

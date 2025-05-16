@@ -42,7 +42,7 @@ export class TaskAssignment {
   updated_at: Date;
 
   @ManyToOne(() => Task, (task) => task.task_assignments, { eager: true })
-  @JoinColumn({ 
+  @JoinColumn({
     name: 'task_id',
     referencedColumnName: 'id',
   })
