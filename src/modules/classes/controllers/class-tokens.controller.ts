@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Query } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ClassTokenService } from "../services/class-token.service";
 import { Roles } from "../../auth/decorators/role.decorator";
@@ -56,5 +56,16 @@ export class ClassTokensController {
             id,
             new Date(expirationDate),
         );
+    }
+
+    @Delete(':token')
+    @Roles('admin')
+    @ApiOperation({ summary: 'Invalidate a class token' })
+    @ApiParam({ name: 'token', type: String, description: 'Class token' })
+    @ApiResponse({ status: 200 })
+    async invalidateClassToken(
+        @Param('token') token: string,
+    ): Promise<void> {
+        return this.classTokenService.invalidateClassToken(token);
     }
 }

@@ -170,6 +170,21 @@ export class ClassTokenService {
     return { data, total };
   }
 
+  async invalidateClassToken(token: string): Promise<void> {
+    this.logger.debug(`Invalidating class token: ${token}`);
+
+    const classToken = await this.classTokenRepository.findOne({
+      where: { token },
+    });
+
+    if (!classToken) {
+      this.logger.warn(`Class token not found`);
+      throw new BadRequestException('Class token not found');
+    }
+
+    await this.classTokenRepository.remove(classToken);
+  }
+
   private getLastClassToken(classId: string): Promise<ClassToken | null> {
     this.logger.debug(`Fetching last class token for class ID: ${classId}`);
     return this.classTokenRepository.findOne({
