@@ -16,7 +16,7 @@ export class CreatePeriodDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'Semester of the period',
-    example: '1',
+    examples: ['1', '2'],
     required: true,
     enum: ['1', '2'],
     type: 'string',

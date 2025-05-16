@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsEnum, IsDateString } from 'class-validator';
+import { IsString, IsNumber, IsEnum, IsDateString, IsBoolean } from 'class-validator';
 
 export class PeriodResponseDto {
   @IsString()
@@ -23,7 +23,7 @@ export class PeriodResponseDto {
   @IsEnum(['1', '2'])
   @ApiProperty({
     description: 'Semester of the period',
-    example: '1',
+    examples: ['1', '2'],
     required: true,
     enum: ['1', '2'],
     type: 'string',
@@ -38,6 +38,14 @@ export class PeriodResponseDto {
     type: 'number',
   })
   period_number: number;
+
+  @IsBoolean()
+  @ApiProperty({
+    description: 'Is the period active?',
+    example: true,
+    required: true,
+  })
+  is_active: boolean;
 
   @IsDateString()
   @ApiProperty({

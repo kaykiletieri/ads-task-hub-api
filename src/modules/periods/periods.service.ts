@@ -128,7 +128,7 @@ export class PeriodsService {
     period.year = dto.year || period.year;
     period.semester = dto.semester || period.semester;
     period.period_number = dto.period_number || period.period_number;
-    period.updated_at = new Date().toISOString();
+    period.updated_at = new Date();
     period.is_active =
       dto.is_active !== undefined ? dto.is_active : period.is_active;
 
@@ -160,8 +160,9 @@ export class PeriodsService {
       year: period.year,
       semester: period.semester,
       period_number: period.period_number,
-      created_at: period.created_at,
-      updated_at: period.updated_at,
+      is_active: period.is_active,
+      created_at: period.created_at.toDateString(),
+      updated_at: period.updated_at.toDateString(),
     };
   }
 }
