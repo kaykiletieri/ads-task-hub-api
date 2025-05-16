@@ -29,38 +29,6 @@ export class CreateTaskDto {
   })
   description?: string;
 
-  @IsEnum(['project', 'task', 'assessment', 'metting'])
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Type of the task',
-    example: 'assignment',
-    required: true,
-    enum: ['project', 'task', 'assessment', 'metting'],
-    type: 'string',
-  })
-  type: 'project' | 'task' | 'assessment' | 'metting';
-
-  @IsDateString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Deadline for the task',
-    example: '2025-07-10T00:00:00Z',
-    required: true,
-    type: 'string',
-  })
-  deadline: string;
-
-  @IsEnum(['pending', 'canceled', 'completed'])
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Type of the task',
-    example: 'pending',
-    required: true,
-    enum: ['pending', 'canceled', 'completed'],
-    type: 'string',
-  })
-  status: 'pending' | 'canceled' | 'completed';
-
   @IsString()
   @IsOptional()
   @ApiProperty({
@@ -71,23 +39,45 @@ export class CreateTaskDto {
   })
   link?: string;
 
-  @IsUUID()
+  @IsEnum(['project', 'task', 'assessment', 'meetting'])
   @IsNotEmpty()
   @ApiProperty({
-    description: 'ID of the user associated with the task',
-    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Type of the task',
+    example: 'assessment',
     required: true,
+    enum: ['project', 'task', 'assessment', 'meetting'],
     type: 'string',
   })
-  user_id: string;
+  type: 'project' | 'task' | 'assessment' | 'meetting';
 
-  @IsUUID()
+  @IsEnum(['pending', 'expired', 'canceled', 'available'])
   @IsNotEmpty()
   @ApiProperty({
-    description: 'ID of the class associated with the task',
-    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Availability status of the task',
+    example: 'pending',
+    required: true,
+    enum: ['pending', 'expired', 'canceled', 'available'],
+    type: 'string',
+  })
+  availability_status: 'pending' | 'expired' | 'canceled' | 'available';
+
+  @IsDateString()
+  @IsOptional()
+  @ApiProperty({
+    description: 'Availability date for the task',
+    example: '2025-07-10T00:00:00Z',
+    required: false,
+    type: 'string',
+  })
+  availability_at?: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Deadline for the task',
+    example: '2025-07-10T00:00:00Z',
     required: true,
     type: 'string',
   })
-  class_id: string;
+  deadline: string;
 }

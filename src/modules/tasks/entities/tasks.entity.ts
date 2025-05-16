@@ -30,7 +30,7 @@ export class Task {
 
   @Column({
     type: 'enum',
-    enum: ['project', 'task', 'assessment', 'metting'],
+    enum: ['project', 'task', 'assessment', 'meetting'],
     default: 'project',
     nullable: false,
     transformer: {
@@ -38,7 +38,7 @@ export class Task {
       to: (value: string) => value,
     },
   })
-  type: 'project' | 'task' | 'assessment' | 'metting';
+  type: 'project' | 'task' | 'assessment' | 'meetting';
 
   @Column({
     type: 'enum',
@@ -95,4 +95,11 @@ export class Task {
   })
   @JoinColumn({ name: 'created_by' })
   created_by: User;
+
+  @ManyToOne(() => User, user => user.updated_tasks, {
+    nullable: false,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'updated_by' })
+  updated_by: User;
 }
