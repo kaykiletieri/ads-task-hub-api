@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import {
+  ApiOperation,
   ApiParam,
   ApiTags
 } from '@nestjs/swagger';
@@ -18,6 +19,10 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post('user/:userId')
+  @ApiOperation({
+    summary: 'Create a task for a specific user',
+    description: 'Creates a task for a user with the specified ID.',
+  })
   @ApiParam({
     name: 'userId',
     description: 'ID of the user to create a task for',
@@ -27,4 +32,5 @@ export class TasksController {
   createTaskForUser(@Param('userId') userId: string, @Body() taskData: CreateTaskDto, @Req() req: any) {
     return this.tasksService.createTaskForUser(userId, req.user.sub, taskData);
   }
+  
 }

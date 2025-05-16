@@ -35,7 +35,10 @@ export class ClassesController {
   ) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all classes with pagination' })
+  @ApiOperation({ 
+    summary: 'Get all classes with pagination',
+    description: 'Retrieves all classes with optional pagination and sorting.',
+   })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'order_by', required: false, type: String })
@@ -49,7 +52,10 @@ export class ClassesController {
 
   @Post()
   @Roles('admin')
-  @ApiOperation({ summary: 'Create a new class' })
+  @ApiOperation({ 
+    summary: 'Create a new class',
+    description: 'Creates a new class with the provided details.',
+   })
   @ApiBody({ type: CreateClassDto })
   @ApiResponse({ status: 201, type: ClassResponseDto })
   async createClass(
@@ -59,7 +65,10 @@ export class ClassesController {
   }
 
   @Get('period/:periodId')
-  @ApiOperation({ summary: 'Get classes by period' })
+  @ApiOperation({ 
+    summary: 'Get classes by period',
+    description: 'Retrieves all classes for a specific period.',
+   })
   @ApiParam({ name: 'periodId', type: String })
   @ApiResponse({ status: 200, type: ClassResponseDto, isArray: true })
   async getClassesByPeriod(
@@ -69,7 +78,10 @@ export class ClassesController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get class by ID' })
+  @ApiOperation({ 
+    summary: 'Get class by ID',
+    description: 'Retrieves a class by its unique identifier.',
+   })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: ClassResponseDto })
   async getClassById(
@@ -80,7 +92,10 @@ export class ClassesController {
 
   @Put(':id')
   @Roles('admin')
-  @ApiOperation({ summary: 'Update an existing class' })
+  @ApiOperation({ 
+    summary: 'Update an existing class',
+    description: 'Updates an existing class with the provided details.'
+  })
   @ApiParam({ name: 'id', type: String })
   @ApiBody({ type: UpdateClassDto })
   @ApiResponse({ status: 200, type: ClassResponseDto })
@@ -93,7 +108,9 @@ export class ClassesController {
 
   @Delete(':id')
   @Roles('admin')
-  @ApiOperation({ summary: 'Delete a class' })
+  @ApiOperation({ summary: 'Delete a class',
+    description: 'Deletes a class by its unique identifier.',
+   })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200 })
   async deleteClass(

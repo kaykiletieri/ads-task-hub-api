@@ -12,7 +12,10 @@ export class ClassTokensController {
 
     @Get('class/:id')
     @Roles('admin', 'coordinator')
-    @ApiOperation({ summary: 'Get all tokens for a specific class' })
+    @ApiOperation({ 
+        summary: 'Get all tokens for a specific class',
+        description: 'Retrieves all active class tokens for a specific class with optional pagination and sorting.',
+     })
     @ApiParam({ name: 'id', type: String, description: 'Class ID' })
     @ApiQuery({ name: 'page', required: false, type: Number })
     @ApiQuery({ name: 'limit', required: false, type: Number })
@@ -24,7 +27,10 @@ export class ClassTokensController {
 
     @Get()
     @Roles('admin', 'coordinator')
-    @ApiOperation({ summary: 'Get all active class tokens with pagination' })
+    @ApiOperation({ 
+        summary: 'Get all active class tokens with pagination',
+        description: 'Retrieves all active class tokens with optional pagination and sorting.',
+     })
     @ApiQuery({ name: 'page', required: false, type: Number })
     @ApiQuery({ name: 'limit', required: false, type: Number })
     @ApiQuery({ name: 'order_by', required: false, type: String })
@@ -38,7 +44,10 @@ export class ClassTokensController {
 
     @Post(':id/generate')
     @Roles('admin')
-    @ApiOperation({ summary: 'Generate a class token' })
+    @ApiOperation({ 
+        summary: 'Generate a class token',
+        description: 'Generates a new class token for a specific class with an expiration date.',
+     })
     @ApiParam({ name: 'id', type: String, description: 'Class ID' })
     @ApiBody({
         schema: {
@@ -60,7 +69,10 @@ export class ClassTokensController {
 
     @Delete(':token')
     @Roles('admin')
-    @ApiOperation({ summary: 'Invalidate a class token' })
+    @ApiOperation({ 
+        summary: 'Invalidate a class token',
+        description: 'Invalidates a specific class token, making it unusable.',
+     })
     @ApiParam({ name: 'token', type: String, description: 'Class token' })
     @ApiResponse({ status: 200 })
     async invalidateClassToken(
