@@ -39,6 +39,7 @@ export class ClassesService {
       where: { is_active: true },
       skip: (page - 1) * limit,
       order: { [order_by]: order_direction },
+      relations: ['period'],
     });
 
     this.logger.debug(`Found ${total} classes`);
@@ -53,7 +54,8 @@ export class ClassesService {
     this.logger.debug(`Fetching class with ID: ${id}`);
 
     const classEntity = await this.classRepository.findOne({
-      where: { id, is_active: true },
+      where: { id, is_active: true,  },
+      relations: ['period'], 
     });
 
     if (!classEntity) {

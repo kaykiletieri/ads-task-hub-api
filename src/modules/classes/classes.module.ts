@@ -6,11 +6,12 @@ import { Period } from '../periods/periods.entity';
 import { Class } from './entities/classes.entity';
 import { ClassToken } from './entities/class-token.entity';
 import { ClassTokenService } from './services/class-token.service';
+import { ClassTokensController } from './class-tokens.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Class, ClassToken, Period])],
   providers: [ClassesService, ClassTokenService],
-  controllers: [ClassesController],
+  controllers: [ClassesController, ClassTokensController],
   exports: [ClassesService, ClassTokenService],
 })
 export class ClassesModule {}

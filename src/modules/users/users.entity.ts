@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Class } from '../classes/entities/classes.entity';
 import { TaskAssignment } from '../tasks/entities/task_assignment.entity';
+import { Task } from '../tasks/entities/tasks.entity';
 
 @Entity('users')
 export class User {
@@ -65,4 +66,7 @@ export class User {
 
   @OneToMany(() => TaskAssignment, (taskAssignment) => taskAssignment.user)
   task_assignments?: TaskAssignment[];
+
+  @OneToMany(() => Task, task => task.created_by)
+  created_tasks: Task[];
 }

@@ -5,8 +5,11 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   OneToMany,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { TaskAssignment } from './task_assignment.entity';
+import { User } from 'src/modules/users/users.entity';
 
 @Entity('tasks')
 export class Task {
@@ -85,4 +88,11 @@ export class Task {
 
   @OneToMany(() => TaskAssignment, (taskAssignment) => taskAssignment.task)
   task_assignments?: TaskAssignment[];
+
+  @ManyToOne(() => User, user => user.created_tasks, {
+    nullable: false,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'created_by' })
+  created_by: User;
 }
