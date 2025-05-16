@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ClassesService } from './services/classes.service';
-import { ClassesController } from './classes.controller';
+import { ClassesController } from './controllers/classes.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Period } from '../periods/periods.entity';
 import { Class } from './entities/classes.entity';
 import { ClassToken } from './entities/class-token.entity';
 import { ClassTokenService } from './services/class-token.service';
-import { ClassTokensController } from './class-tokens.controller';
+import { ClassTokensController } from './controllers/class-tokens.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Class, ClassToken, Period])],

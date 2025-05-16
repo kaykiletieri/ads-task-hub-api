@@ -9,14 +9,14 @@ import {
   Query,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { ClassesService } from './services/classes.service';
-import { ClassTokenService } from './services/class-token.service';
-import { ClassResponseDto } from './dtos/class-response.dto';
-import { CreateClassDto } from './dtos/create-class.dto';
-import { UpdateClassDto } from './dtos/update-class.dto';
+import { ClassesService } from '../services/classes.service';
+import { ClassTokenService } from '../services/class-token.service';
+import { ClassResponseDto } from '../dtos/class-response.dto';
+import { CreateClassDto } from '../dtos/create-class.dto';
+import { UpdateClassDto } from '../dtos/update-class.dto';
 import { PaginationQueryDto } from 'src/common/dtos/pagination-query.dto';
-import { ClassToken } from './entities/class-token.entity';
-import { Roles } from '../auth/decorators/role.decorator';
+import { ClassToken } from '../entities/class-token.entity';
+import { Roles } from '../../auth/decorators/role.decorator';
 import {
   ApiOperation,
   ApiResponse,

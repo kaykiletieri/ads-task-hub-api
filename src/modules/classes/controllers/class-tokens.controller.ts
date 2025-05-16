@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ClassTokenService } from "./services/class-token.service";
-import { Roles } from "../auth/decorators/role.decorator";
-import { ClassToken } from "./entities/class-token.entity";
+import { ClassTokenService } from "../services/class-token.service";
+import { Roles } from "../../auth/decorators/role.decorator";
+import { ClassToken } from "../entities/class-token.entity";
 import { PaginationQueryDto } from "src/common/dtos/pagination-query.dto";
 
 @Controller('class-tokens')
