@@ -7,7 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   setupGlobalConfigurations(app);
-  setupSwagger(app);
+
+  if (process.env.NODE_ENV !== 'production') {
+    setupSwagger(app);
+  }
 
   await app.listen(process.env.PORT ?? 3000);
 
