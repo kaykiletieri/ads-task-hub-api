@@ -6,7 +6,7 @@ export function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
     .setTitle('ADS Task Hub API')
     .setVersion('1.0')
-    .setDescription('Documentação da API do projeto ADS Task Hub')
+    .setDescription('ADS Task Hub API Documentation')
     .addServer(
       process.env.NODE_ENV === 'production'
         ? 'https://api.adstaskhub.com.br'
@@ -17,7 +17,7 @@ export function setupSwagger(app: INestApplication): void {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
-        description: 'Digite: Bearer <token>',
+        description: 'JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer {token}"',
       },
       'bearerAuth',
     )
